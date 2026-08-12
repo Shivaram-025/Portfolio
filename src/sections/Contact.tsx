@@ -235,7 +235,7 @@ const Contact = () => {
                   </div>
 
                   {/* Budget */}
-                  <div className="mb-6">
+                  {/* <div className="mb-6">
                     <label className="block text-white/60 text-sm mb-2">Budget</label>
                     <div className="relative">
                       <select
@@ -257,7 +257,7 @@ const Contact = () => {
                           }`}
                       />
                     </div>
-                  </div>
+                  </div> */}
 
                   {/* Message */}
                   <div className="mb-8">

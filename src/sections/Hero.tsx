@@ -1,6 +1,6 @@
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { ArrowDown } from 'lucide-react';
+import { ArrowDown, FileText } from 'lucide-react';
 import { useEffect, useRef } from 'react';
 
 gsap.registerPlugin(ScrollTrigger);
@@ -244,19 +244,25 @@ const Hero = () => {
           style={{ perspective: '1000px' }}
         >
           <span className="block overflow-hidden">
-            {'Shivarama R'.split('').map((char, i) => (
-              <span key={i} className="char inline-block">
+            {'Shivarama'.split('').map((char, i) => (
+              <span key={`first-${i}`} className="char inline-block">
+                {char}
+              </span>
+            ))}
+            <span className="char inline-block text-[#4A6FFF]">.</span>
+            {'R'.split('').map((char, i) => (
+              <span key={`last-${i}`} className="char inline-block">
                 {char}
               </span>
             ))}
           </span>
-          <span className="block overflow-hidden">
+          {/* <span className="block overflow-hidden">
             {'Developer'.split('').map((char, i) => (
               <span key={i} className="char inline-block text-gradient">
                 {char}
               </span>
             ))}
-          </span>
+          </span> */}
         </h1>
 
         <div ref={subheadingWrapperRef}>
@@ -264,9 +270,9 @@ const Hero = () => {
             ref={subheadingRef}
             className="text-lg sm:text-xl md:text-2xl text-white/70 max-w-3xl mx-auto mb-10"
           >
-            Passionate Full Stack Developer crafting production-ready, scalable web applications
-            <br />
-            at the intersection of frontend elegance & backend performance.
+            Passionate Full Stack Developer crafting production-ready,
+            scalable web applications at the intersection of frontend
+            elegance & backend performance.
           </p>
         </div>
 
@@ -279,16 +285,16 @@ const Hero = () => {
             View Selected Works
             <ArrowDown className="w-4 h-4 group-hover:translate-y-1 transition-transform" />
           </button>
+
           <a
-            href="#contact"
-            onClick={(e) => {
-              e.preventDefault();
-              document.querySelector('#contact')?.scrollIntoView({ behavior: 'smooth' });
-            }}
-            className="px-8 py-4 border border-white/20 text-white font-medium rounded-full hover:bg-white/10 transition-all duration-300"
+            href="/shivaram_cv_resume.pdf"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="px-8 py-4 border border-white/20 text-white font-medium rounded-full hover:bg-white/10 transition-all duration-300 flex items-center gap-2"
             data-magnetic
           >
-            Get in Touch
+            View Resume
+            <FileText className="w-4 h-4" />
           </a>
         </div>
       </div>

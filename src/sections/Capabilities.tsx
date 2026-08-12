@@ -14,20 +14,18 @@ const skills: Skill[] = [
   { name: 'JavaScript', level: 90, category: 'Languages' },
   { name: 'Java', level: 80, category: 'Languages' },
   { name: 'Python', level: 75, category: 'Languages' },
-  { name: 'C++', level: 80, category: 'Languages' },
-  { name: 'C', level: 75, category: 'Languages' },
-  { name: 'C# (Basics)', level: 65, category: 'Languages' },
+  { name: 'C/C++', level: 80, category: 'Languages' },
   { name: 'React.js', level: 90, category: 'Frameworks' },
   { name: 'Next.js', level: 85, category: 'Frameworks' },
   { name: 'Node.js', level: 85, category: 'Frameworks' },
   { name: 'Express.js', level: 80, category: 'Frameworks' },
   { name: 'TailwindCSS', level: 90, category: 'Frameworks' },
-  { name: '.NET (Basics)', level: 65, category: 'Frameworks' },
   { name: 'MySQL', level: 80, category: 'Databases' },
   { name: 'MongoDB', level: 85, category: 'Databases' },
   { name: 'PostgreSQL (NeonDB)', level: 75, category: 'Databases' },
   { name: 'Git', level: 85, category: 'Tools' },
   { name: 'GitHub', level: 90, category: 'Tools' },
+  { name: 'Computer Vision', level: 70, category: 'AI/ML' },
 ];
 
 const Capabilities = () => {
@@ -193,7 +191,14 @@ const Capabilities = () => {
     const marqueesContainer = marqueesRef.current;
     if (!section || !heading || !marqueesContainer) return;
 
-    const ctx = gsap.context(() => {
+    const mm = gsap.matchMedia(section);
+
+    mm.add({
+      isDesktop: '(min-width: 1024px)',
+      isMobile: '(max-width: 1023px)',
+    }, (context) => {
+      const isDesktop = (context.conditions as any)?.isDesktop;
+
       // Background transition to dark
       gsap.to(section, {
         backgroundColor: '#050505',
@@ -247,19 +252,21 @@ const Capabilities = () => {
           repeat: -1,
         });
 
-        ScrollTrigger.create({
-          trigger: section,
-          start: 'top bottom',
-          end: 'bottom top',
-          onUpdate: (self) => {
-            const v = Math.abs(self.getVelocity()) / 1000;
-            const speed = Math.min(3, 1 + v * 0.5);
-            gsap.to(m1, {
-              timeScale: speed,
-              duration: 0.3,
-            });
-          },
-        });
+        if (isDesktop) {
+          ScrollTrigger.create({
+            trigger: section,
+            start: 'top bottom',
+            end: 'bottom top',
+            onUpdate: (self) => {
+              const v = Math.abs(self.getVelocity()) / 1000;
+              const speed = Math.min(3, 1 + v * 0.5);
+              gsap.to(m1, {
+                timeScale: speed,
+                duration: 0.3,
+              });
+            },
+          });
+        }
       }
 
       if (m2) {
@@ -273,19 +280,21 @@ const Capabilities = () => {
           repeat: -1,
         });
 
-        ScrollTrigger.create({
-          trigger: section,
-          start: 'top bottom',
-          end: 'bottom top',
-          onUpdate: (self) => {
-            const v = Math.abs(self.getVelocity()) / 1000;
-            const speed = Math.min(3, 1 + v * 0.5);
-            gsap.to(m2, {
-              timeScale: speed,
-              duration: 0.3,
-            });
-          },
-        });
+        if (isDesktop) {
+          ScrollTrigger.create({
+            trigger: section,
+            start: 'top bottom',
+            end: 'bottom top',
+            onUpdate: (self) => {
+              const v = Math.abs(self.getVelocity()) / 1000;
+              const speed = Math.min(3, 1 + v * 0.5);
+              gsap.to(m2, {
+                timeScale: speed,
+                duration: 0.3,
+              });
+            },
+          });
+        }
       }
 
       if (m3) {
@@ -297,23 +306,25 @@ const Capabilities = () => {
           repeat: -1,
         });
 
-        ScrollTrigger.create({
-          trigger: section,
-          start: 'top bottom',
-          end: 'bottom top',
-          onUpdate: (self) => {
-            const v = Math.abs(self.getVelocity()) / 1000;
-            const speed = Math.min(3, 1 + v * 0.5);
-            gsap.to(m3, {
-              timeScale: speed,
-              duration: 0.3,
-            });
-          },
-        });
+        if (isDesktop) {
+          ScrollTrigger.create({
+            trigger: section,
+            start: 'top bottom',
+            end: 'bottom top',
+            onUpdate: (self) => {
+              const v = Math.abs(self.getVelocity()) / 1000;
+              const speed = Math.min(3, 1 + v * 0.5);
+              gsap.to(m3, {
+                timeScale: speed,
+                duration: 0.3,
+              });
+            },
+          });
+        }
       }
-    }, section);
+    });
 
-    return () => ctx.revert();
+    return () => mm.revert();
   }, []);
 
   return (

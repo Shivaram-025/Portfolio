@@ -1,7 +1,7 @@
-import { useEffect, useRef, useState } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { ArrowUpRight, ExternalLink } from 'lucide-react';
+import { useEffect, useRef, useState } from 'react';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -27,12 +27,12 @@ const projects: Project[] = [
   },
   {
     id: 2,
-    title: 'Educational Access & Outcomes',
+    title: 'Investigation on Educational Access,Satisfaction & Outcomes',
     category: 'Data Analytics & Web App',
     description: 'Analyzed student data on education access, satisfaction, and outcomes using Power BI, displaying it in a Next.js web application.',
     image: '/project-echo.jpg',
     tags: ['Next.js', 'PowerBI', 'Data Analysis'],
-    link: '#',
+    link: 'https://student-analysis-dashboard-seven.vercel.app/',
   },
   {
     id: 3,
@@ -59,7 +59,14 @@ const Works = () => {
     const projectsContainer = projectsRef.current;
     if (!section || !heading || !projectsContainer) return;
 
-    const ctx = gsap.context(() => {
+    const mm = gsap.matchMedia(section);
+
+    mm.add({
+      isDesktop: '(min-width: 1024px)',
+      isMobile: '(max-width: 1023px)',
+    }, (context) => {
+      const isDesktop = (context.conditions as any)?.isDesktop;
+
       // Heading animation
       gsap.from(heading.children, {
         y: 80,
@@ -79,7 +86,7 @@ const Works = () => {
       projectItems.forEach((item, index) => {
         gsap.from(item, {
           y: 60,
-          skewY: 3,
+          skewY: isDesktop ? 3 : 0,
           opacity: 0,
           duration: 0.8,
           ease: 'power3.out',
@@ -92,38 +99,47 @@ const Works = () => {
         });
       });
 
-      // Kinetic scroll effect
-      let currentSkew = 0;
-      let targetSkew = 0;
+      if (isDesktop) {
+        // Kinetic scroll effect
+        let currentSkew = 0;
+        let targetSkew = 0;
+        let animationFrameId: number;
 
-      ScrollTrigger.create({
-        trigger: section,
-        start: 'top bottom',
-        end: 'bottom top',
-        onUpdate: (self) => {
-          const velocity = self.getVelocity();
-          targetSkew = Math.max(-5, Math.min(5, velocity / 500));
-        },
-      });
-
-      const updateSkew = () => {
-        currentSkew += (targetSkew - currentSkew) * 0.1;
-        targetSkew *= 0.95;
-        
-        projectItems.forEach((item) => {
-          gsap.set(item, { skewY: currentSkew });
+        ScrollTrigger.create({
+          trigger: section,
+          start: 'top bottom',
+          end: 'bottom top',
+          onUpdate: (self) => {
+            const velocity = self.getVelocity();
+            targetSkew = Math.max(-5, Math.min(5, velocity / 500));
+          },
         });
-        
-        requestAnimationFrame(updateSkew);
-      };
-      updateSkew();
-    }, section);
 
-    return () => ctx.revert();
+        const updateSkew = () => {
+          currentSkew += (targetSkew - currentSkew) * 0.1;
+          targetSkew *= 0.95;
+
+          projectItems.forEach((item) => {
+            gsap.set(item, { skewY: currentSkew });
+          });
+
+          animationFrameId = requestAnimationFrame(updateSkew);
+        };
+        updateSkew();
+
+        return () => {
+          cancelAnimationFrame(animationFrameId);
+        };
+      }
+    });
+
+    return () => mm.revert();
   }, []);
 
   // Floating image follow cursor
   useEffect(() => {
+    if (window.innerWidth < 1024) return;
+
     const image = imageRef.current;
     if (!image) return;
 
@@ -146,6 +162,7 @@ const Works = () => {
   }, [hoveredProject, mousePos]);
 
   const handleMouseMove = (e: React.MouseEvent) => {
+    if (window.innerWidth < 1024) return;
     setMousePos({ x: e.clientX, y: e.clientY });
   };
 
@@ -186,16 +203,20 @@ const Works = () => {
         {/* Projects List */}
         <div ref={projectsRef} className="space-y-0">
           {projects.map((project, index) => (
-            <div
+            <a
               key={project.id}
-              className="project-item group relative border-t border-white/10 py-8 lg:py-12 cursor-pointer"
-              onMouseEnter={() => setHoveredProject(index)}
-              onMouseLeave={() => setHoveredProject(null)}
+              href={project.link}
+              target={project.link && project.link !== '#' ? '_blank' : undefined}
+              rel={project.link && project.link !== '#' ? 'noopener noreferrer' : undefined}
+              className="project-item group relative block border-t border-white/10 py-8 lg:py-12 cursor-pointer"
+              onMouseEnter={() => {
+                if (window.innerWidth >= 1024) setHoveredProject(index);
+              }}
+              onMouseLeave={() => {
+                if (window.innerWidth >= 1024) setHoveredProject(null);
+              }}
             >
-              <a
-                href={project.link}
-                className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 lg:gap-8"
-              >
+              <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 lg:gap-8">
                 {/* Left: Number & Title */}
                 <div className="flex items-baseline gap-6 lg:gap-12">
                   <span className="text-sm text-white/40 font-mono">
@@ -232,13 +253,13 @@ const Works = () => {
                     <ArrowUpRight className="w-5 h-5 text-white/60 group-hover:text-white transition-colors" />
                   </div>
                 </div>
-              </a>
+              </div>
 
               {/* Hover line */}
               <div className="absolute bottom-0 left-0 w-0 h-[2px] bg-[#4A6FFF] group-hover:w-full transition-all duration-500 ease-out" />
-            </div>
+            </a>
           ))}
-          
+
           {/* Bottom border */}
           <div className="border-t border-white/10" />
         </div>

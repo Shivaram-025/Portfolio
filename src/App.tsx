@@ -12,6 +12,7 @@ import Footer from './sections/Footer';
 import Hero from './sections/Hero';
 import Navigation from './sections/Navigation';
 import Works from './sections/Works';
+import Experience from './sections/Experience';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -58,6 +59,7 @@ function App() {
       <main className="relative">
         <Hero />
         <About />
+        <Experience />
         <Works />
         <Capabilities />
         {/* <Testimonials /> */}

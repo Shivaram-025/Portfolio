@@ -81,7 +81,7 @@ const About = () => {
   const stats = [
     { icon: Clock, value: '1+', label: 'Year Experience' },
     { icon: Award, value: '4+', label: 'Certifications' },
-    { icon: Coffee, value: '3+', label: 'Key Projects' },
+    { icon: Coffee, value: '3+', label: 'Projects' },
   ];
 
   return (
@@ -116,9 +116,9 @@ const About = () => {
               About Me
             </span>
 
-            <h2 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-[#1D1D1F] mb-6 tracking-tight">
+            {/* <h2 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-[#1D1D1F] mb-6 tracking-tight">
               The Developer
-            </h2>
+            </h2> */}
 
             <div className="space-y-4 text-lg text-[#6E6E73] leading-relaxed mb-10">
               <p>
@@ -128,8 +128,7 @@ const About = () => {
               </p>
               <p>
                 My experience spans across designing clean, efficient backend systems with Node.js and
-                architecting databases like MySQL, MongoDB, and NeonDB. I am currently expanding my
-                knowledge in C# and the .NET ecosystem to apply enterprise-level object-oriented programming principles.
+                architecting databases like MySQL, MongoDB, and NeonDB.
               </p>
               <p>
                 Combining strong technical capabilities with soft skills in problem solving and team

@@ -63,7 +63,7 @@ const Footer = () => {
           {/* Brand */}
           <div className="footer-item lg:col-span-2">
             <a href="#hero" onClick={(e) => handleLinkClick(e, '#hero')} className="inline-block mb-6">
-              <span className="text-2xl font-bold text-white">Shivarama</span>
+              <span className="text-2xl font-bold text-white">Shivaram</span>
               <span className="text-2xl font-bold text-[#4A6FFF]">.</span>
             </a>
             <p className="text-white/60 leading-relaxed max-w-md mb-6">
