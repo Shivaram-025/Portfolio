@@ -1,6 +1,6 @@
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { Briefcase, Calendar, Code, GraduationCap } from 'lucide-react';
+import { Briefcase, Calendar, Code, GraduationCap, Heart } from 'lucide-react';
 import { useEffect, useRef } from 'react';
 
 gsap.registerPlugin(ScrollTrigger);
@@ -12,14 +12,14 @@ interface ExperienceItem {
   period: string;
   description: string[];
   skills: string[];
-  type: 'work' | 'academic' | 'freelance';
+  type: 'work' | 'academic' | 'freelance' | 'volunteer';
 }
 
 const experiences: ExperienceItem[] = [
   {
     id: 1,
     role: 'Product Development Intern',
-    company: 'Yuvamytr Edtech Solutions Private Limited',
+    company: 'Yuvamytr Edtech Solutions Pvt. Ltd.',
     period: 'Sep 2024 - Mar 2026',
     description: [
       'Spearheaded the end-to-end development of highly responsive, full-stack web applications, leveraging React.js and Tailwind CSS for the front-end alongside Node.js and MongoDB for scalable back-end architecture.',
@@ -27,6 +27,18 @@ const experiences: ExperienceItem[] = [
     ],
     skills: ['React.js', 'Node.js', 'Express.js', 'MongoDB', 'TailwindCSS'],
     type: 'work',
+  },
+  {
+    id: 2,
+    role: 'Nexora_2K26 - Team Lead - Hackathon Organizer',
+    company: 'Amruta Institute of Engineering and Management Sciences, Bengaluru',
+    period: 'Feb 2026 - Apr 2026',
+    description: [
+      'Organized and coordinated logistics for a college-wide hackathon with 200+ participants, ensuring smooth operation, scheduling, and judge panels.',
+      'Coordinated mentor support, tech workshops, and platform infrastructure for participant teams.',
+    ],
+    skills: ['Event Management', 'Team Leadership', 'Community Building', 'Problem Solving'],
+    type: 'volunteer',
   },
   // {
   //   id: 2,
@@ -67,52 +79,77 @@ const Experience = () => {
     const timeline = timelineRef.current;
     if (!section || !sticky || !timeline) return;
 
-    const ctx = gsap.context(() => {
-      // Sticky column contents fade in
-      gsap.from(sticky.children, {
-        opacity: 0,
-        y: 40,
-        stagger: 0.15,
-        duration: 0.8,
-        ease: 'power3.out',
-        scrollTrigger: {
-          trigger: sticky,
-          start: 'top 85%',
-          toggleActions: 'play none none reverse',
-        },
-      });
+    const mm = gsap.matchMedia(section);
 
-      // Animate the vertical line height
-      gsap.to('.timeline-progress-line', {
-        height: '100%',
-        ease: 'none',
-        scrollTrigger: {
-          trigger: timeline,
-          start: 'top 70%',
-          end: 'bottom 70%',
-          scrub: true,
-        },
-      });
+    mm.add({
+      isDesktop: '(min-width: 1024px)',
+      isMobile: '(max-width: 1023px)',
+    }, (context) => {
+      const isDesktop = (context.conditions as any)?.isDesktop;
 
-      // Timeline items fade in from side
-      const items = timeline.querySelectorAll('.timeline-item');
-      items.forEach((item, index) => {
-        gsap.from(item, {
+      if (isDesktop) {
+        // Sticky column contents fade in
+        gsap.from(sticky.children, {
           opacity: 0,
-          x: 50,
+          y: 40,
+          stagger: 0.15,
           duration: 0.8,
           ease: 'power3.out',
           scrollTrigger: {
-            trigger: item,
+            trigger: sticky,
             start: 'top 85%',
             toggleActions: 'play none none reverse',
           },
-          delay: index * 0.1,
         });
-      });
-    }, section);
 
-    return () => ctx.revert();
+        // Animate the vertical line height
+        gsap.to('.timeline-progress-line', {
+          height: '100%',
+          ease: 'none',
+          scrollTrigger: {
+            trigger: timeline,
+            start: 'top 70%',
+            end: 'bottom 70%',
+            scrub: true,
+          },
+        });
+
+        // Timeline items fade in from side
+        const items = timeline.querySelectorAll('.timeline-item');
+        items.forEach((item, index) => {
+          gsap.from(item, {
+            opacity: 0,
+            x: 50,
+            duration: 0.8,
+            ease: 'power3.out',
+            scrollTrigger: {
+              trigger: item,
+              start: 'top 85%',
+              toggleActions: 'play none none reverse',
+            },
+            delay: index * 0.1,
+          });
+        });
+      } else {
+        // Mobile view: simple fade-in animations without heavy scrub or translation skew/shifts
+        const items = timeline.querySelectorAll('.timeline-item');
+        items.forEach((item) => {
+          gsap.from(item, {
+            opacity: 0,
+            y: 20,
+            duration: 0.6,
+            ease: 'power3.out',
+            scrollTrigger: {
+              trigger: item,
+              start: 'top 90%',
+              toggleActions: 'play none none reverse',
+            },
+          });
+        });
+      }
+    });
+
+    return () => mm.revert();
   }, []);
 
   return (
@@ -136,7 +173,7 @@ const Experience = () => {
               Experience
             </h2>
             <p className="text-white/60 leading-relaxed max-w-sm">
-              A timeline of my professional developer internships, software engineering freelancing work, and academic technology leadership roles.
+              A timeline of my professional developer internships, and academic technology leadership roles.
             </p>
           </div>
 
@@ -159,7 +196,9 @@ const Experience = () => {
                   ? Briefcase
                   : exp.type === 'academic'
                     ? GraduationCap
-                    : Code;
+                    : exp.type === 'volunteer'
+                      ? Heart
+                      : Code;
               return (
                 <div key={exp.id} className="timeline-item relative group">
                   {/* Timeline point */}

@@ -38,6 +38,7 @@ const Footer = () => {
   const navLinks = [
     { label: 'Home', href: '#hero' },
     { label: 'About', href: '#about' },
+    { label: 'Experience', href: '#experience' },
     { label: 'Works', href: '#works' },
     { label: 'Skills', href: '#capabilities' },
     { label: 'Contact', href: '#contact' },
@@ -66,10 +67,10 @@ const Footer = () => {
               <span className="text-2xl font-bold text-white">Shivaram</span>
               <span className="text-2xl font-bold text-[#4A6FFF]">.</span>
             </a>
-            <p className="text-white/60 leading-relaxed max-w-md mb-6">
+            {/* <p className="text-white/60 leading-relaxed max-w-md mb-6">
               Passionate Full Stack Developer crafting production-ready, scalable web applications
               at the intersection of frontend elegance & backend performance.
-            </p>
+            </p> */}
 
             {/* Social Links */}
             <div className="flex gap-3">

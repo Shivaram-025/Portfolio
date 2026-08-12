@@ -39,7 +39,9 @@ const Hero = () => {
       color: string;
     }> = [];
 
-    const particleCount = 80;
+    // Optimize performance: reduce count on mobile
+    const isMobile = window.innerWidth < 1024;
+    const particleCount = isMobile ? 25 : 45;
     const colors = ['#4A6FFF', '#5a7fff', '#3a5fef', '#6B8FFF'];
 
     for (let i = 0; i < particleCount; i++) {
@@ -60,22 +62,42 @@ const Hero = () => {
       mouseX = e.clientX;
       mouseY = e.clientY;
     };
-    window.addEventListener('mousemove', handleMouseMove);
+
+    if (!isMobile) {
+      window.addEventListener('mousemove', handleMouseMove);
+    }
+
+    // intersection observer to pause animation when offscreen
+    let isVisible = true;
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        isVisible = entry.isIntersecting;
+      },
+      { threshold: 0.01 }
+    );
+    observer.observe(canvas);
 
     const animate = () => {
+      if (!isVisible) {
+        animationRef.current = requestAnimationFrame(animate);
+        return;
+      }
+
       ctx.fillStyle = '#050505';
       ctx.fillRect(0, 0, canvas.width, canvas.height);
 
       particles.forEach((particle) => {
         // Mouse influence
-        const dx = mouseX - particle.x;
-        const dy = mouseY - particle.y;
-        const dist = Math.sqrt(dx * dx + dy * dy);
+        if (!isMobile) {
+          const dx = mouseX - particle.x;
+          const dy = mouseY - particle.y;
+          const dist = Math.sqrt(dx * dx + dy * dy);
 
-        if (dist < 300) {
-          const force = (300 - dist) / 300;
-          particle.vx += (dx / dist) * force * 0.02;
-          particle.vy += (dy / dist) * force * 0.02;
+          if (dist < 300) {
+            const force = (300 - dist) / 300;
+            particle.vx += (dx / dist) * force * 0.02;
+            particle.vy += (dy / dist) * force * 0.02;
+          }
         }
 
         // Update position
@@ -112,17 +134,18 @@ const Hero = () => {
       });
 
       // Connect nearby particles
+      const connectionDist = isMobile ? 120 : 200;
       for (let i = 0; i < particles.length; i++) {
         for (let j = i + 1; j < particles.length; j++) {
           const dx = particles[i].x - particles[j].x;
           const dy = particles[i].y - particles[j].y;
           const dist = Math.sqrt(dx * dx + dy * dy);
 
-          if (dist < 200) {
+          if (dist < connectionDist) {
             ctx.beginPath();
             ctx.moveTo(particles[i].x, particles[i].y);
             ctx.lineTo(particles[j].x, particles[j].y);
-            ctx.strokeStyle = `rgba(74, 111, 255, ${0.1 * (1 - dist / 200)})`;
+            ctx.strokeStyle = `rgba(74, 111, 255, ${0.1 * (1 - dist / connectionDist)})`;
             ctx.lineWidth = 1;
             ctx.stroke();
           }
@@ -136,7 +159,10 @@ const Hero = () => {
 
     return () => {
       window.removeEventListener('resize', resize);
-      window.removeEventListener('mousemove', handleMouseMove);
+      if (!isMobile) {
+        window.removeEventListener('mousemove', handleMouseMove);
+      }
+      observer.disconnect();
       if (animationRef.current) {
         cancelAnimationFrame(animationRef.current);
       }

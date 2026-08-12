@@ -13,23 +13,18 @@ const ProgressIndicator = () => {
     const dot = dotRef.current;
     if (!progress || !dot) return;
 
+    // Use quickSetter for ultra-high-performance scrolling updates
+    const setProgressScale = gsap.quickSetter(progress, 'scaleY');
+    const setDotY = gsap.quickSetter(dot, 'y', '%');
+
     // Create scroll progress animation
     const scrollTrigger = ScrollTrigger.create({
       trigger: document.body,
       start: 'top top',
       end: 'bottom bottom',
       onUpdate: (self) => {
-        const progressValue = self.progress;
-        gsap.to(progress, {
-          scaleY: progressValue,
-          duration: 0.1,
-          ease: 'none',
-        });
-        gsap.to(dot, {
-          y: progressValue * 100 + '%',
-          duration: 0.1,
-          ease: 'none',
-        });
+        setProgressScale(self.progress);
+        setDotY(self.progress * 100);
       },
     });
 

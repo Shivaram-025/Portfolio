@@ -120,7 +120,7 @@ const About = () => {
               The Developer
             </h2> */}
 
-            <div className="space-y-4 text-lg text-[#6E6E73] leading-relaxed mb-10">
+            <div className="space-y-4 text-lg text-[#6E6E73] leading- relaxed mb-10">
               <p>
                 I am an Information Science and Engineering student at Amruta Institute of Engineering
                 and Management Sciences (2023 - 2027) based in Bengaluru, KA. I specialize in building

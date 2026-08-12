@@ -59,7 +59,8 @@ const Capabilities = () => {
     window.addEventListener('resize', resize);
 
     // Create particles in a sphere formation
-    const particleCount = 150;
+    const isMobile = window.innerWidth < 1024;
+    const particleCount = isMobile ? 60 : 120;
     const particles: Array<{
       x: number;
       y: number;
@@ -335,10 +336,10 @@ const Capabilities = () => {
       style={{ backgroundColor: '#F5F5F7' }}
     >
       {/* Particle Sphere Canvas */}
-      <canvas
+      {/* <canvas
         ref={canvasRef}
         className="absolute inset-0 w-full h-full opacity-60"
-      />
+      /> */}
 
       <div className="relative z-10 max-w-[1400px] mx-auto px-6 lg:px-12 mb-16">
         {/* Header */}
@@ -347,11 +348,10 @@ const Capabilities = () => {
             Expertise
           </span>
           <h2 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-white tracking-tight mb-6">
-            The Toolkit
+            My Skills
           </h2>
           <p className="text-lg text-white/60 leading-relaxed max-w-2xl">
-            A curated collection of technologies and tools I use to bring ideas
-            to life. Always learning, always evolving.
+            Always Learning, Always Evolving.
           </p>
         </div>
       </div>
