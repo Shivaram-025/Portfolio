@@ -27,6 +27,15 @@ const projects: Project[] = [
   },
   {
     id: 2,
+    title: 'Suvarnamukhi Samskriti Dhama',
+    category: 'Web App',
+    description: 'A residential middle school dedicated to fostering cultural excellence, holistic development, and traditional values in Ramanagaram, Karnataka.',
+    image: '/project-echo.jpg',
+    tags: ['Next.js', 'Taiwindcss'],
+    link: 'https://suvarnamukhi-samskriti-dhama.vercel.app/',
+  },
+  {
+    id: 3,
     title: 'Investigation on Educational Access,Satisfaction & Outcomes',
     category: 'Data Analytics & Web App',
     description: 'Analyzed student data on education access, satisfaction, and outcomes using Power BI, displaying it in a Next.js web application.',
@@ -35,7 +44,7 @@ const projects: Project[] = [
     link: 'https://student-analysis-dashboard-seven.vercel.app/',
   },
   {
-    id: 3,
+    id: 4,
     title: 'Air Quality Monitoring System',
     category: 'IoT & Hardware Programming',
     description: 'An IoT-based air monitoring system measuring temperature and humidity with real-time data collection via Arduino/NodeMCU and ThingSpeak.',
